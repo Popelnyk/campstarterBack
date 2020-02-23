@@ -1,9 +1,12 @@
 from django.http import HttpResponse
 from django.middleware import csrf
 from django.shortcuts import get_object_or_404
+from requests import Response
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.utils import json
 
-from myapp.models import Campaign, New, Comment, Type, Tag, Like, Rating, AppUser
+from myapp.models import Campaign, New, Comment, Type, Tag, Like, Rating, AppUser, Bonus
 from myapp.permissions import IsOwnerOrReadOnly, IsOwnerOfCampaignOrReadOnly
 from myapp.serializers import CommentSerializer, CampaignSerializer, NewSerializer, AppUserSerializer, LikeSerializer, \
     RatingSerializer
@@ -26,7 +29,7 @@ class CampaignList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, current_amount_of_money=0)
 
-    search_fields = ['about', 'name', ]
+    search_fields = ['about', 'name', 'theme']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -132,3 +135,34 @@ class NewCreate(generics.CreateAPIView):
 
     permission_classes = [IsOwnerOfCampaignOrReadOnly]
     serializer_class = NewSerializer
+
+
+#"{\"value\":13,\"campaign_id\":5,\"user_id\":1}"
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_money(request, pk):
+    try:
+        data = json.loads(request.data)
+        campaign_id = data['campaign_id']
+        user_id = data['user_id']
+        value = data['value']
+
+        if (not isinstance(campaign_id, int)) or (not isinstance(user_id, int) or (not isinstance(value, int))):
+            return HttpResponse(status=500, content='campaign_id, user_id, value must be int')
+
+        campaign = Campaign.objects.get(id=campaign_id)
+        cur_money = campaign.current_amount_of_money
+        user = AppUser.objects.get(id=user_id)
+        cur_user_money = user.money
+
+        if value > cur_user_money:
+            return HttpResponse(status=500, content='not enough money on account')
+
+        user.money = cur_user_money - value
+        campaign.current_amount_of_money = cur_money + value
+        campaign.save()
+        user.save()
+
+        return HttpResponse(status=200, content='success')
+    except Exception as e:
+        return HttpResponse(status=500, content=e)

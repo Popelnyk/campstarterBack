@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import timedelta
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -45,7 +47,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'rest_framework_simplejwt',
+
+    'social_django',
+    'rest_social_auth'
 ]
+
+#SOCIAL_AUTH_FACEBOOK_KEY = '561681284437481'
+#SOCIAL_AUTH_FACEBOOK_SECRET = 'bc8645fceb74fa4ec462e43395e75824'
+
 
 REST_REGISTRATION = {
     'REGISTER_VERIFICATION_ENABLED': False,
@@ -53,10 +62,14 @@ REST_REGISTRATION = {
     'RESET_PASSWORD_VERIFICATION_ENABLED': False,
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+#REST_FRAMEWORK = {
+#    'DEFAULT_AUTHENTICATION_CLASSES': [
+#        'rest_framework_simplejwt.authentication.JWTAuthentication',
+#    ],
+#}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

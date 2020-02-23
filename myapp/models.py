@@ -8,12 +8,13 @@ from django.db import models
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=50)
-    name = models.CharField(max_length=50, null=True)
+    name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, null=True)
     password = models.CharField(max_length=200)
     work = models.CharField(max_length=30, null=True)
     hometown = models.CharField(max_length=30, null=True)
     hobbies = models.CharField(max_length=30, null=True)
+    money = models.PositiveIntegerField(default=4000, null=True)
 
     #photo = models.ImageField(upload_to='uploads/')
     #bonuses
@@ -22,12 +23,13 @@ class AppUser(models.Model):
 class Campaign(models.Model):
     owner = models.ForeignKey('auth.User', related_name='campaigns', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
+    theme = models.CharField(max_length=50)
     about = models.TextField(max_length=1500)
-    youtube_link = models.URLField(max_length=50)
+    youtube_link = models.URLField(max_length=150)
     goal_amount_of_money = models.PositiveIntegerField()
     current_amount_of_money = models.PositiveIntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
-    #bonuses
+    bonuses = models.CharField(max_length=500, default='')
 
     class Meta:
         ordering = ['creation_date']
@@ -57,6 +59,12 @@ class New(models.Model):
     title = models.CharField(max_length=100)
     about = models.TextField(max_length=1000)
     creation_date = models.DateTimeField(auto_now_add=True)
+
+
+class Bonus(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    about = models.CharField(max_length=100)
+    value = models.PositiveIntegerField()
 
 
 class Tag(models.Model):

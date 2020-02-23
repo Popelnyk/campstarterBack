@@ -22,6 +22,7 @@ urlpatterns = [
     path('campaigns/<int:pk>/news/', views.NewList.as_view()),
     path('campaigns/<int:pk>/news/create-new/', views.NewCreate.as_view()),
     path('campaigns/<int:pk>/rating/', views.AddRating.as_view()),
+    path('campaigns/<int:pk>/donate/', views.add_money),
     path('comments/<int:pk>/', views.CommentDetail.as_view()),
     path('comments/<int:pk>/like/', views.AddLike.as_view())
 ]
