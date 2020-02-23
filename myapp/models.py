@@ -10,7 +10,7 @@ class AppUser(models.Model):
     username = models.CharField(max_length=50)
     name = models.CharField(max_length=50, null=True)
     email = models.EmailField(max_length=100, null=True)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=200)
     work = models.CharField(max_length=30, null=True)
     hometown = models.CharField(max_length=30, null=True)
     hobbies = models.CharField(max_length=30, null=True)

@@ -25,17 +25,20 @@ class AppUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', 'name', 'email', 'work', 'hometown', 'hobbies', 'campaigns']
 
     def create(self, validated_data):
-        user = User.objects.create_user(username=validated_data.get('username'),
+        user = User.objects.create_user(id=validated_data.get('id'),
+                                        username=validated_data.get('username'),
                                         email=validated_data.get('email'),
                                         password=validated_data.get('password'))
 
-        return AppUser.objects.create(user=user, **validated_data)
+        return AppUser.objects.create(user=user, username=validated_data.get('username'),
+                                      name=validated_data.get('name'), work=validated_data.get('work'),
+                                      hometown=validated_data.get('hometown'), hobbies=validated_data.get('hobbies'))
 
     def get_campaigns(self, appuser):
-        ids = []
+        result = []
         for item in Campaign.objects.filter(owner=appuser.user):
-            ids.append(item.id)
-        return ids
+            result.append({'id': item.id, 'name': item.name, 'about': item.about, 'creation_date': item.creation_date})
+        return result
 
     '''
     def update(self, instance, validated_data):
