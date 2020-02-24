@@ -78,7 +78,7 @@ class AddRating(generics.CreateAPIView):
         if len(ratings_of_user.filter(campaign=campaign)) == 0 and int(self.request.data['value']) <= 5:
             serializer.save(owner=self.request.user, campaign=campaign)
         else:
-            return HttpResponse(status=HTTP_400_BAD_REQUEST)
+            raise Exception
 
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = RatingSerializer
@@ -142,13 +142,11 @@ class NewCreate(generics.CreateAPIView):
 @permission_classes([permissions.IsAuthenticated])
 def add_money(request, pk):
     try:
-        data = json.loads(request.data)
-        campaign_id = data['campaign_id']
-        user_id = data['user_id']
-        value = data['value']
-
-        if (not isinstance(campaign_id, int)) or (not isinstance(user_id, int) or (not isinstance(value, int))):
-            return HttpResponse(status=500, content='campaign_id, user_id, value must be int')
+        print(request.data)
+        data = request.data
+        campaign_id = int(data['campaign_id'])
+        user_id = int(data['user_id'])
+        value = int(data['value'])
 
         campaign = Campaign.objects.get(id=campaign_id)
         cur_money = campaign.current_amount_of_money

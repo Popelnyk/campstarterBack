@@ -92,7 +92,8 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         campaign = Campaign.objects.create(**validated_data)
-        bonuses_from_json = json.dumps(validated_data.get('bonuses'))
+        bonuses_from_json = json.loads(validated_data.get('bonuses'))
+        print(bonuses_from_json)
         for item in bonuses_from_json:
             Bonus.objects.create(campaign=campaign, about=item['about'], value=int(item['value']))
 
