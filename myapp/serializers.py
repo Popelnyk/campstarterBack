@@ -20,11 +20,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AppUserSerializer(serializers.ModelSerializer):
     campaigns = serializers.SerializerMethodField()
-    #serializers.PrimaryKeyRelatedField(many=True, queryset=Campaign.objects.all(), allow_null=True)
+    bonuses = serializers.SerializerMethodField()
 
     class Meta:
         model = AppUser
-        fields = ['id', 'username', 'password', 'name', 'email', 'work', 'hometown', 'hobbies', 'money', 'campaigns']
+        fields = ['id', 'username', 'password', 'name', 'email', 'work', 'hometown', 'hobbies', 'money', 'campaigns',
+                  'bonuses']
 
     def create(self, validated_data):
         user = User.objects.create_user(id=validated_data.get('id'),
@@ -42,40 +43,12 @@ class AppUserSerializer(serializers.ModelSerializer):
             result.append({'id': item.id, 'name': item.name, 'about': item.about, 'creation_date': item.creation_date})
         return result
 
-    '''
-    def update(self, instance, validated_data):
-        print(validated_data)
-        print(type(instance))
-        print(self.context)
-        #instance.username = validated_data.get('username')
-        #instance.email = validated_data.get('email')
-        #instance.password = validated_data.get('password')
-        #work = validated_data.get('work', instance.work)
-        #hometown = validated_data.get('hometown', instance.hometown)
-        #hobbies = validated_data.get('hobbies', instance.hobbies)
-        #campaigns = validated_data.get('campaigns', instance.campaigns)
-
-        instance.save()
-        return instance
-    '''
-
-
-    '''
-    def restore_object(self, attrs, instance=None):
-        if instance is not None:
-            instance.user.username = attrs.get('user.username', instance.user.username)
-            instance.user.email = attrs.get('user.email', instance.user.email)
-            instance.work = attrs.get('work', instance.work)
-            instance.hometown = attrs.get('hometown', instance.hometown)
-            instance.hobbies = attrs.get('hobbies', instance.hobbies)
-            instance.campaigns = attrs.get('campaigns', instance.campaigns)
-            instance.user.password = attrs.get('user.password', instance.user.password)
-            return instance
-
-        user = User.objects.create_user(username=attrs.get('user.username'), email=attrs.get('user.email'),
-                                        password=attrs.get('user.password'))
-        return AppUser(user=user)
-    '''
+    def get_bonuses(self, appuser):
+        result = []
+        bonus_list = Bonus.objects.filter(owner__id=appuser.id)
+        for item in bonus_list:
+            result.append(item.about)
+        return result
 
 
 class CampaignSerializer(serializers.ModelSerializer):

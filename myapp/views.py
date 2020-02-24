@@ -142,8 +142,8 @@ class NewCreate(generics.CreateAPIView):
 @permission_classes([permissions.IsAuthenticated])
 def add_money(request, pk):
     try:
-        print(request.data)
         data = request.data
+        print(data)
         campaign_id = int(data['campaign_id'])
         user_id = int(data['user_id'])
         value = int(data['value'])
@@ -158,6 +158,19 @@ def add_money(request, pk):
 
         user.money = cur_user_money - value
         campaign.current_amount_of_money = cur_money + value
+
+        for item in Bonus.objects.all():
+            print(item.campaign_id)
+
+        bonuses_of_campaign = Bonus.objects.filter(campaign=campaign)
+        print(bonuses_of_campaign)
+
+        for item in bonuses_of_campaign:
+            print(item)
+            if item.value <= value:
+                item.owner.add(user)
+                item.save()
+
         campaign.save()
         user.save()
 

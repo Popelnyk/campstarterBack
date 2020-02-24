@@ -15,9 +15,7 @@ class AppUser(models.Model):
     hometown = models.CharField(max_length=30, null=True)
     hobbies = models.CharField(max_length=30, null=True)
     money = models.PositiveIntegerField(default=4000, null=True)
-
     #photo = models.ImageField(upload_to='uploads/')
-    #bonuses
 
 
 class Campaign(models.Model):
@@ -63,6 +61,7 @@ class New(models.Model):
 
 class Bonus(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    owner = models.ManyToManyField(AppUser, null=True)
     about = models.CharField(max_length=100)
     value = models.PositiveIntegerField()
 
