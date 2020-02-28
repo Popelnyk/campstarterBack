@@ -76,7 +76,7 @@ class CampaignSerializer(serializers.ModelSerializer):
         for item in tags_from_json:
             item['name'] = str.lower(item['name'])
             if Tag.objects.filter(name__exact=item['name']).count() > 0:
-                tag = Tag.objects.get(name=item['name'])
+                tag = Tag.objects.get(name__exact=item['name'])
                 tag.campaign.add(campaign)
             else:
                 Tag.objects.create(campaign=campaign, name=item['name'])

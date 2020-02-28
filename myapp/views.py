@@ -30,10 +30,17 @@ class CampaignList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, current_amount_of_money=0)
 
-    search_fields = ['about', 'name', 'theme', 'tags']
+    search_fields = ['about', 'name', '=theme', '=tags']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignSerializer
+
+
+class CampaignListByTags(generics.ListAPIView):
+    search_fields = ['=tags']
+    filter_backends = (filters.SearchFilter,)
     queryset = Campaign.objects.all()
     serializer_class = CampaignSerializer
 

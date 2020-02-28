@@ -13,6 +13,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('campaigns/', views.CampaignList.as_view()),
+    path('campaigns_by_tags/', views.CampaignListByTags.as_view()),
     path('campaigns/best/', views.BestCampaign.as_view()),
     path('campaigns/<int:pk>/', views.CampaignDetail.as_view()),
     path('users/', views.AppUserList.as_view()),
