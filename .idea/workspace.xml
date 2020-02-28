@@ -57,6 +57,12 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -108,7 +114,7 @@
       <option name="presentableId" value="Default" />
       <updated>1581776709882</updated>
       <workItem from="1581776738385" duration="125164000" />
-      <workItem from="1582526972023" duration="899000" />
+      <workItem from="1582526972023" duration="4916000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing auth system">
       <created>1582408208401</created>
@@ -152,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582512054315</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="donate fixing">
+      <created>1582534937905</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1582534937905</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

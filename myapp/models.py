@@ -15,7 +15,6 @@ class AppUser(models.Model):
     hometown = models.CharField(max_length=30, null=True)
     hobbies = models.CharField(max_length=30, null=True)
     money = models.PositiveIntegerField(default=4000, null=True)
-    #photo = models.ImageField(upload_to='uploads/')
 
 
 class Campaign(models.Model):
@@ -28,6 +27,7 @@ class Campaign(models.Model):
     current_amount_of_money = models.PositiveIntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
     bonuses = models.CharField(max_length=500, default='')
+    tags = models.CharField(max_length=500, default='')
 
     class Meta:
         ordering = ['creation_date']
@@ -67,8 +67,5 @@ class Bonus(models.Model):
 
 
 class Tag(models.Model):
-    pass
-
-
-class Type(models.Model):
-    pass
+    campaign = models.ManyToManyField(Campaign, null=True)
+    name = models.CharField(max_length=50)

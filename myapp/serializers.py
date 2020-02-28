@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.utils import json
 
-from myapp.models import Campaign, New, Comment, Tag, Type, AppUser, Like, Rating, Bonus
+from myapp.models import Campaign, New, Comment, Tag, AppUser, Like, Rating, Bonus
 from django.contrib.auth.models import User
 from rest_framework import permissions
 import rest_registration
@@ -56,19 +56,30 @@ class CampaignSerializer(serializers.ModelSerializer):
     owner_id = serializers.ReadOnlyField(source='owner.id')
     total_rating = serializers.SerializerMethodField()
     bonuses = serializers.CharField(max_length=500, allow_null=True)
+    tags = serializers.CharField(max_length=500, allow_null=True)
 
     class Meta:
         model = Campaign
         fields = ['id', 'owner', 'owner_id', 'name', 'theme', 'about', 'youtube_link',
                   'goal_amount_of_money', 'current_amount_of_money',
-                  'creation_date', 'total_rating', 'bonuses']
+                  'creation_date', 'total_rating', 'bonuses', 'tags']
 
     def create(self, validated_data):
         campaign = Campaign.objects.create(**validated_data)
         bonuses_from_json = json.loads(validated_data.get('bonuses'))
+        tags_from_json = json.loads(validated_data.get('tags'))
         print(bonuses_from_json)
+
         for item in bonuses_from_json:
             Bonus.objects.create(campaign=campaign, about=item['about'], value=int(item['value']))
+
+        for item in tags_from_json:
+            item['name'] = str.lower(item['name'])
+            if Tag.objects.filter(name__exact=item['name']).count() > 0:
+                tag = Tag.objects.get(name=item['name'])
+                tag.campaign.add(campaign)
+            else:
+                Tag.objects.create(campaign=campaign, name=item['name'])
 
         return campaign
 
