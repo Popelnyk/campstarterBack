@@ -10,7 +10,7 @@ from rest_framework.utils import json
 from myapp.models import Campaign, New, Comment, Tag, Like, Rating, AppUser, Bonus
 from myapp.permissions import IsOwnerOrReadOnly, IsOwnerOfCampaignOrReadOnly
 from myapp.serializers import CommentSerializer, CampaignSerializer, NewSerializer, AppUserSerializer, LikeSerializer, \
-    RatingSerializer
+    RatingSerializer, TagSerializer
 from rest_framework import generics, filters, viewsets
 from rest_framework import permissions
 from django.contrib.auth.models import User
@@ -38,10 +38,13 @@ class CampaignList(generics.ListCreateAPIView):
     serializer_class = CampaignSerializer
 
 
-class CampaignListByTags(generics.ListAPIView):
-    search_fields = ['tags']
-    filter_backends = (filters.SearchFilter,)
-    queryset = Campaign.objects.all()
+class CampaignListByTag(generics.ListAPIView):
+    def get_queryset(self):
+        tag_id = self.kwargs['pk']
+        tag = Tag.objects.get(id=tag_id)
+        print(tag)
+        return Campaign.objects.filter(tag=tag)
+
     serializer_class = CampaignSerializer
 
 
@@ -143,6 +146,11 @@ class NewCreate(generics.CreateAPIView):
 
     permission_classes = [IsOwnerOfCampaignOrReadOnly]
     serializer_class = NewSerializer
+
+
+class TagList(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
 
 
 #"{\"value\":13,\"campaign_id\":5,\"user_id\":1}"

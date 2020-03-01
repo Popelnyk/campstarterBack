@@ -78,8 +78,12 @@ class CampaignSerializer(serializers.ModelSerializer):
             if Tag.objects.filter(name__exact=item['name']).count() > 0:
                 tag = Tag.objects.get(name__exact=item['name'])
                 tag.campaign.add(campaign)
+                tag.save()
             else:
-                Tag.objects.create(campaign=campaign, name=item['name'])
+                Tag.objects.create(name=item['name'])
+                tag = Tag.objects.get(name__exact=item['name'])
+                tag.campaign.add(campaign)
+                tag.save()
 
         return campaign
 
@@ -129,3 +133,8 @@ class NewSerializer(serializers.ModelSerializer):
         creation_date = serializers.DateTimeField()
         fields = ['id', 'title', 'about', 'campaign', 'creation_date']
 
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']

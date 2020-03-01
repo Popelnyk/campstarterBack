@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2e311d59-2ebd-4dea-967a-5e4f04112c2a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -112,7 +114,7 @@
       <option name="presentableId" value="Default" />
       <updated>1581776709882</updated>
       <workItem from="1581776738385" duration="125164000" />
-      <workItem from="1582526972023" duration="6763000" />
+      <workItem from="1582526972023" duration="10641000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing auth system">
       <created>1582408208401</created>
@@ -177,7 +179,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582925440903</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="tag system update">
+      <created>1582925834056</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1582925834056</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
