@@ -62,6 +62,20 @@ class CampaignListOfUser(generics.ListCreateAPIView):
 
 
 class CampaignDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    def perform_destroy(self, instance):
+        campaign = Campaign.objects.get(id=instance.id)
+        tags_of_campaign = Tag.objects.filter(campaign=campaign)
+        for tag in tags_of_campaign:
+            if tag.campaign.count() == 1:
+                tag.delete()
+
+        bonuses_of_campaign = Bonus.objects.filter(campaign=campaign)
+        for bonus in bonuses_of_campaign:
+            bonus.delete()
+
+        instance.delete()
+
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
     queryset = Campaign.objects.all()
