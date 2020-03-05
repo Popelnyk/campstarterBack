@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2e311d59-2ebd-4dea-967a-5e4f04112c2a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/campstarter/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/campstarter/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -112,7 +112,7 @@
       <option name="presentableId" value="Default" />
       <updated>1581776709882</updated>
       <workItem from="1581776738385" duration="125164000" />
-      <workItem from="1582526972023" duration="14921000" />
+      <workItem from="1582526972023" duration="17360000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing auth system">
       <created>1582408208401</created>
@@ -191,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583050231106</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="campaigns deleting + tag deleting + bonus deleting">
+      <created>1583223142964</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1583223142964</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,6 +224,7 @@
     <MESSAGE value="tag system" />
     <MESSAGE value="tag system update" />
     <MESSAGE value="tag system finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="tag system finished" />
+    <MESSAGE value="campaigns deleting + tag deleting + bonus deleting" />
+    <option name="LAST_COMMIT_MESSAGE" value="campaigns deleting + tag deleting + bonus deleting" />
   </component>
 </project>

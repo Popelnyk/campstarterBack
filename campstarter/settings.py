@@ -39,17 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'crispy_forms',
+    'django.contrib.sites',
     'myapp.apps.MyappConfig',
+
+    'corsheaders',
+    'crispy_forms',
     'rest_framework',
     'rest_registration',
     'rest_framework.authtoken',
-    'corsheaders',
     'rest_framework_simplejwt',
-
-    'social_django',
-    'rest_social_auth'
 ]
 
 #SOCIAL_AUTH_FACEBOOK_KEY = '561681284437481'
@@ -67,6 +65,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
+REST_USE_JWT = True
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
@@ -95,6 +95,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'campstarter.urls'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+
+)
 
 TEMPLATES = [
     {
