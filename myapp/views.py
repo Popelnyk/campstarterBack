@@ -1,22 +1,38 @@
+from django.contrib.auth import login
 from django.http import HttpResponse
 from django.middleware import csrf
 from django.shortcuts import get_object_or_404
 from httpie import status
-from requests import Response
+from requests import Response, HTTPError
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.utils import json
+from rest_framework.views import APIView
+from rest_social_auth.views import *
+from social_core.backends.oauth import BaseOAuth2
+from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
+from social_django.utils import load_strategy, load_backend
 
+from myapp import serializers
 from myapp.models import Campaign, New, Comment, Tag, Like, Rating, AppUser, Bonus
 from myapp.permissions import IsOwnerOrReadOnly, IsOwnerOfCampaignOrReadOnly
 from myapp.serializers import CommentSerializer, CampaignSerializer, NewSerializer, AppUserSerializer, LikeSerializer, \
-    RatingSerializer, TagSerializer
+    RatingSerializer, TagSerializer, MyUserSerializer, FileSerializer
 from rest_framework import generics, filters, viewsets
 from rest_framework import permissions
 from django.contrib.auth.models import User
 
 
+class MySocialView(SocialJWTPairUserAuthView):
+    serializer_class = MyUserSerializer
+
+    def perform_authentication(self, request):
+        print(request.data)
+
+
 class AppUserList(generics.ListCreateAPIView):
+
     queryset = AppUser.objects.all()
     serializer_class = AppUserSerializer
 
@@ -85,12 +101,16 @@ class CampaignDetail(generics.RetrieveUpdateDestroyAPIView):
 class BestCampaign(generics.ListAPIView):
 
     def get_queryset(self):
-        best_rating, rating = None, -1
-        for item in Rating.objects.all():
-            if item.value > rating:
-                rating = item.value
-                best_rating = item
-        return Campaign.objects.filter(id=best_rating.campaign_id)
+        if Campaign.objects.count() > 0:
+            best_rating, rating = None, -1
+            for item in Rating.objects.all():
+                if item.value > rating:
+                    rating = item.value
+                    best_rating = item
+                    print(item.campaign_id, item.value)
+
+            return Campaign.objects.filter(id=best_rating.campaign_id)
+        return []
 
     serializer_class = CampaignSerializer
 
@@ -202,3 +222,16 @@ def add_money(request, pk):
         return HttpResponse(status=200, content='success')
     except Exception as e:
         return HttpResponse(status=500, content=e)
+
+
+class FileView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = FileSerializer(data=request.data)
+        file = request.data['file']
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

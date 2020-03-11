@@ -69,3 +69,8 @@ class Bonus(models.Model):
 class Tag(models.Model):
     campaign = models.ManyToManyField(Campaign, null=True)
     name = models.CharField(max_length=50)
+
+
+class File(models.Model):
+    file = models.FileField(blank=False, null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)

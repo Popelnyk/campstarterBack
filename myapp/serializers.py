@@ -1,7 +1,8 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.utils import json
 
-from myapp.models import Campaign, New, Comment, Tag, AppUser, Like, Rating, Bonus
+from myapp.models import Campaign, New, Comment, Tag, AppUser, Like, Rating, Bonus, File
 from django.contrib.auth.models import User
 from rest_framework import permissions
 import rest_registration
@@ -18,6 +19,25 @@ class UserSerializer(serializers.ModelSerializer):
 '''
 
 
+class MyUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        exclude = ('password', 'user_permissions', 'groups')
+
+    def create(self, validated_data):
+        last_id = User.objects.last().id
+
+        print(validated_data)
+        print(3)
+
+        user = User.objects.create_user(**validated_data)
+
+        us = AppUser.objects.create(id=last_id + 1, user=user, username=validated_data.get('username'))
+        print(us)
+
+        return user
+
+
 class AppUserSerializer(serializers.ModelSerializer):
     campaigns = serializers.SerializerMethodField()
     bonuses = serializers.SerializerMethodField()
@@ -28,12 +48,14 @@ class AppUserSerializer(serializers.ModelSerializer):
                   'bonuses']
 
     def create(self, validated_data):
-        user = User.objects.create_user(id=validated_data.get('id'),
+        last_id = User.objects.last().id
+
+        user = User.objects.create_user(id=last_id + 1,
                                         username=validated_data.get('username'),
                                         email=validated_data.get('email'),
                                         password=validated_data.get('password'))
 
-        return AppUser.objects.create(user=user, username=validated_data.get('username'),
+        return AppUser.objects.create(id=last_id + 1, user=user, username=validated_data.get('username'),
                                       name=validated_data.get('name'), work=validated_data.get('work'),
                                       hometown=validated_data.get('hometown'), hobbies=validated_data.get('hobbies'))
 
@@ -128,13 +150,24 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class NewSerializer(serializers.ModelSerializer):
+    isBig = serializers.SerializerMethodField()
+
     class Meta:
         model = New
         creation_date = serializers.DateTimeField()
-        fields = ['id', 'title', 'about', 'campaign', 'creation_date']
+        fields = ['id', 'title', 'about', 'isBig', 'campaign', 'creation_date']
+
+    def get_isBig(self, new):
+        return len(new.about) > 500
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name']
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields = ('file', 'timestamp')

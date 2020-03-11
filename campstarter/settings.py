@@ -48,11 +48,31 @@ INSTALLED_APPS = [
     'rest_registration',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+
+    ########
+    'social_django',
+    'rest_social_auth',
 ]
 
-#SOCIAL_AUTH_FACEBOOK_KEY = '561681284437481'
-#SOCIAL_AUTH_FACEBOOK_SECRET = 'bc8645fceb74fa4ec462e43395e75824'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
+#####
+
+SOCIAL_AUTH_FACEBOOK_KEY = 2500936673496401
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd0652b7e33a156d2db63bb250e7fd4b4'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'username']  # optional
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+#####
+
+SITE_ID = 1
 
 REST_REGISTRATION = {
     'REGISTER_VERIFICATION_ENABLED': False,
@@ -96,9 +116,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'campstarter.urls'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-
-)
 
 TEMPLATES = [
     {
@@ -116,6 +133,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'campstarter.wsgi.application'
 
