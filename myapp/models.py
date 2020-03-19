@@ -22,7 +22,7 @@ class Campaign(models.Model):
     name = models.CharField(max_length=100, unique=True)
     theme = models.CharField(max_length=50)
     about = models.TextField(max_length=1500)
-    youtube_link = models.URLField(max_length=150)
+    youtube_link = models.URLField(max_length=150, null=True)
     goal_amount_of_money = models.PositiveIntegerField()
     current_amount_of_money = models.PositiveIntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -72,5 +72,7 @@ class Tag(models.Model):
 
 
 class File(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     file = models.FileField(blank=False, null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+    position = models.SmallIntegerField()

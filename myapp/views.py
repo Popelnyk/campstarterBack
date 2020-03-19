@@ -15,8 +15,8 @@ from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 from social_django.utils import load_strategy, load_backend
 
 from myapp import serializers
-from myapp.models import Campaign, New, Comment, Tag, Like, Rating, AppUser, Bonus
-from myapp.permissions import IsOwnerOrReadOnly, IsOwnerOfCampaignOrReadOnly
+from myapp.models import Campaign, New, Comment, Tag, Like, Rating, AppUser, Bonus, File
+from myapp.permissions import IsOwnerOrReadOnly, IsOwnerOfCampaignOrReadOnly, IsOwnerOfUserOrReadOnly
 from myapp.serializers import CommentSerializer, CampaignSerializer, NewSerializer, AppUserSerializer, LikeSerializer, \
     RatingSerializer, TagSerializer, MyUserSerializer, FileSerializer
 from rest_framework import generics, filters, viewsets
@@ -40,6 +40,7 @@ class AppUserList(generics.ListCreateAPIView):
 class AppUserDetail(generics.RetrieveUpdateAPIView):
     queryset = AppUser.objects.all()
     serializer_class = AppUserSerializer
+    permission_classes = [IsOwnerOfUserOrReadOnly]
 
 
 class CampaignList(generics.ListCreateAPIView):
@@ -230,8 +231,27 @@ class FileView(APIView):
     def post(self, request, *args, **kwargs):
         file_serializer = FileSerializer(data=request.data)
         file = request.data['file']
+        campaign_id = int(request.data['campaign'])
+        pos = int(request.data['position'])
+        campaign = Campaign.objects.get(id=campaign_id)
+
         if file_serializer.is_valid():
-            file_serializer.save()
+            file_serializer.save(campaign=campaign, position=pos)
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        pk = json.loads(request.body)['pk']
+        campaign_id = json.loads(request.body)['campaignId']
+
+        files = File.objects.filter(campaign_id=campaign_id)
+        print(files)
+
+        file = files.get(id=pk)
+        file.delete()
+
+        print(File.objects.filter(campaign_id=campaign_id))
+
+        return Response(status=202)
+

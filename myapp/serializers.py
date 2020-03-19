@@ -77,6 +77,7 @@ class CampaignSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     owner_id = serializers.ReadOnlyField(source='owner.id')
     total_rating = serializers.SerializerMethodField()
+    files = serializers.SerializerMethodField()
     bonuses = serializers.CharField(max_length=500, allow_null=True)
     tags = serializers.CharField(max_length=500, allow_null=True)
 
@@ -84,7 +85,7 @@ class CampaignSerializer(serializers.ModelSerializer):
         model = Campaign
         fields = ['id', 'owner', 'owner_id', 'name', 'theme', 'about', 'youtube_link',
                   'goal_amount_of_money', 'current_amount_of_money',
-                  'creation_date', 'total_rating', 'bonuses', 'tags']
+                  'creation_date', 'total_rating', 'bonuses', 'tags', 'files']
 
     def create(self, validated_data):
         campaign = Campaign.objects.create(**validated_data)
@@ -118,6 +119,13 @@ class CampaignSerializer(serializers.ModelSerializer):
         if count_of_ratings == 0:
             count_of_ratings = 1
         return sum_rating / count_of_ratings
+
+    def get_files(self, campaign):
+        files_obj_list = File.objects.filter(campaign=campaign)
+        files_list = []
+        for item in files_obj_list:
+            files_list.append({'url': item.file.url, 'id': item.id, 'position': item.position})
+        return files_list
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -170,4 +178,4 @@ class TagSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ('file', 'timestamp')
+        fields = ['id', 'campaign', 'file', 'position', 'timestamp']
