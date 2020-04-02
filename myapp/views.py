@@ -42,6 +42,17 @@ class AppUserDetail(generics.RetrieveUpdateAPIView):
     serializer_class = AppUserSerializer
     permission_classes = [IsOwnerOfUserOrReadOnly]
 
+    def update(self, request, *args, **kwargs):
+        user = AppUser.objects.get(id=request.data['id'])
+        if request.data['hometown']:
+            user.hometown = request.data['hometown']
+        if request.data['work']:
+            user.work = request.data['work']
+        if request.data['hobbies']:
+            user.hobbies = request.data['hobbies']
+        user.save()
+        return Response(data=request.data, status=status.HTTP_201_CREATED)
+
 
 class CampaignList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
@@ -138,7 +149,7 @@ class CommentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         camp = self.kwargs['pk']
-        return Comment.objects.filter(campaign_id=camp)
+        return Comment.objects.filter(campaign_id=camp).order_by('count_of_likes')
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = CommentSerializer
