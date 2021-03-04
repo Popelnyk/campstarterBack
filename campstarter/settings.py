@@ -22,7 +22,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'oy%h2$6rg%yskpi&ikyv@0n8++w#acz14suq2sr)90(o-)mk9^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,10 +59,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 #####
-
-SOCIAL_AUTH_FACEBOOK_KEY = 2500936673496401
-SOCIAL_AUTH_FACEBOOK_SECRET = 'd0652b7e33a156d2db63bb250e7fd4b4'
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'username']  # optional
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
